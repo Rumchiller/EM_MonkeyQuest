@@ -59,6 +59,10 @@ function MonkeyQuest_OnLoad()
     this:RegisterEvent('PLAYER_ENTERING_WORLD');	-- this event gives me a good character name in situations where 'UNIT_NAME_UPDATE' doesn't even trigger
     this:RegisterEvent('PLAYER_LEVEL_UP');			-- when you level up the difficulty of some quests may change
 
+	-- EM-Addon
+    this:RegisterEvent('QUEST_WATCH_UPDATE');		-- fires just before a quest goal was completed. arg1 describes the quest index
+	-- EM-Addon
+
 	-- events when zone changes to update the zone highlighting quests
     this:RegisterEvent('ZONE_CHANGED');
 	this:RegisterEvent('ZONE_CHANGED_INDOORS');
@@ -226,6 +230,17 @@ function MonkeyQuest_OnEvent(event)
         -- check if this is a quest item
         MonkeyQuest_SearchTooltip();
     end -- UPDATE_MOUSEOVER_UNIT
+
+	-- EM-Addon
+	if (event == 'QUEST_WATCH_UPDATE') then
+
+		if (arg1) then
+			MonkeyQuest_PrintQuestUpdate(arg1);
+		end
+
+    end -- QUEST_WATCH_UPDATE
+	-- EM-Addon
+
 end
 
 -- this function is called when the frame should be dragged around
@@ -752,7 +767,7 @@ function MonkeyQuest_RefreshQuestItemList()
 		-- strQuestLevel			the level of the quest
 		-- strQuestTag				the tag on the quest (ex. COMPLETED)
 		strQuestLogTitleText, strQuestLevel, strQuestTag, isHeader, isCollapsed, isComplete = GetQuestLogTitle(i);
-		
+
 		if (not isHeader) then
 			-- Select the quest log entry for other functions like GetNumQuestLeaderBoards()
 			SelectQuestLogEntry(i);
@@ -769,6 +784,28 @@ function MonkeyQuest_RefreshQuestItemList()
 		end
 	end
 end
+
+-- EM-Addon
+function MonkeyQuest_PrintQuestUpdate(questIndex)
+
+	local objCount, desc, type, done;
+
+	if (questIndex == nil) then
+		return;
+	end
+
+	 objCount = GetNumQuestLeaderBoards(questIndex);
+
+	if (objCount == nil or objCount == 0) then
+		return;
+	end
+
+	for i = 1, objCount, 1 do
+		desc, type, done = GetQuestLogLeaderBoard(i, questIndex);
+	end
+
+end
+-- EM-Addon
 
 -- does a decent job of figuring out if the quest objective is an item and if so adds it to the list
 function MonkeyQuest_AddQuestItemToList(strLeaderBoardText)
@@ -1100,22 +1137,10 @@ function MonkeyQuestButton_OnClick(button)
 	if (IsShiftKeyDown() and ChatFrameEditBox:IsVisible()) then
 		-- what button was it?
 		if (button == "LeftButton") then
-			if (strQuestTag == ELITE) then
-				ChatFrameEditBox:Insert("[" .. strQuestLevel .. "+] " .. strQuestLogTitleText .. " ");
-				
-			elseif (strQuestTag == MONKEYQUEST_DUNGEON) then
-				ChatFrameEditBox:Insert("[" .. strQuestLevel .. "d] " .. strQuestLogTitleText .. " ");
-				
-			elseif (strQuestTag == RAID) then
-				ChatFrameEditBox:Insert("[" .. strQuestLevel .. "r] " .. strQuestLogTitleText .. " ");
-			
-			elseif (strQuestTag == MONKEYQUEST_PVP) then
-				ChatFrameEditBox:Insert("[" .. strQuestLevel .. "p] " .. strQuestLogTitleText .. " ");
-				
-			else
-				ChatFrameEditBox:Insert("[" .. strQuestLevel .. "] " .. strQuestLogTitleText .. " ");
-				
-			end
+
+			local msg = "\124cffffff00\124Hquest:0:" .. strQuestLevel .. "\124h[" .. strQuestLogTitleText .. "]\124h\124r";
+			ChatFrameEditBox:Insert(msg);
+
 		else
 			local strChatObjectives = "";
 
