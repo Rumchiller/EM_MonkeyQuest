@@ -437,6 +437,16 @@ function MonkeyQuestSlash_CmdAlwaysHeaders(bAlways)
 	end
 end
 
+function MonkeyQuestSlash_CmdUseQuestLinks(bUse)
+	MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bUseQuestLinks = bUse;
+	MonkeyQuest_Refresh();
+	
+	-- check for MonkeyBuddy
+	if (MonkeyBuddyQuestFrame_Refresh ~= nil) then
+		MonkeyBuddyQuestFrame_Refresh();
+	end
+end
+
 function MonkeyQuestSlash_CmdHideBorder(bNoBorder)
 	MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bNoBorder = bNoBorder;
 	

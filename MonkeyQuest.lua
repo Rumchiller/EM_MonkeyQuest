@@ -1137,9 +1137,30 @@ function MonkeyQuestButton_OnClick(button)
 	if (IsShiftKeyDown() and ChatFrameEditBox:IsVisible()) then
 		-- what button was it?
 		if (button == "LeftButton") then
+			if (MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bUseQuestLinks == true) then
+				local msg = "\124cffffff00\124Hquest:0:" .. strQuestLevel .. "\124h[" .. strQuestLogTitleText .. "]\124h\124r";
 
-			local msg = "\124cffffff00\124Hquest:0:" .. strQuestLevel .. "\124h[" .. strQuestLogTitleText .. "]\124h\124r";
-			ChatFrameEditBox:Insert(msg);
+				ChatFrameEditBox:Insert(msg);
+
+			else
+				if (strQuestTag == ELITE) then
+					ChatFrameEditBox:Insert("[" .. strQuestLevel .. "+] " .. strQuestLogTitleText .. " ");
+					
+				elseif (strQuestTag == MONKEYQUEST_DUNGEON) then
+					ChatFrameEditBox:Insert("[" .. strQuestLevel .. "d] " .. strQuestLogTitleText .. " ");
+					
+				elseif (strQuestTag == RAID) then
+					ChatFrameEditBox:Insert("[" .. strQuestLevel .. "r] " .. strQuestLogTitleText .. " ");
+				
+				elseif (strQuestTag == MONKEYQUEST_PVP) then
+					ChatFrameEditBox:Insert("[" .. strQuestLevel .. "p] " .. strQuestLogTitleText .. " ");
+					
+				else
+					ChatFrameEditBox:Insert("[" .. strQuestLevel .. "] " .. strQuestLogTitleText .. " ");
+					
+				end
+
+			end
 
 		else
 			local strChatObjectives = "";

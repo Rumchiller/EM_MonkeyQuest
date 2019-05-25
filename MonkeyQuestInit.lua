@@ -87,6 +87,9 @@ function MonkeyQuestInit_LoadConfig()
 	if (MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bAlwaysHeaders == nil) then
 		MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bAlwaysHeaders = false;
 	end
+	if (MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bUseQuestLinks == nil) then
+		MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bUseQuestLinks = false;
+	end
 	if (MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bNoBorder == nil) then
 		MonkeyQuestConfig[MonkeyQuest.m_strPlayer].m_bNoBorder = false;
 	end
